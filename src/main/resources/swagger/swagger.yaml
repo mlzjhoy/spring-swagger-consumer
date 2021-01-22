@@ -1,0 +1,78 @@
+openapi: 3.0.1
+info:
+  title: Consumer User API
+  description: Consumer User API
+  version: 1.0.0
+paths:
+  /v1/accounts/{userId}:
+    get:
+      summary: Returns a user by ID.
+      parameters:
+      - name: userId
+        in: path
+        description: The ID of the user to return.
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          description: Bad request
+components:
+  schemas:
+    Account:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        user:
+          $ref: '#/components/schemas/User'
+        error:
+          $ref: '#/components/schemas/Error'
+      required: 
+        - id
+        - name
+    User:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          pattern: '^[a-z]+$'
+        email:
+          type: string
+        mobile:
+          type: array
+          items:
+            type: string
+        address:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+    Address:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        city:
+          type: string
+        street:
+          type: string
+          maxLength: 40
+    Error:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+        message:
+          type: "string"
